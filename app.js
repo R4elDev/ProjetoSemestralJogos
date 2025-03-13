@@ -19,6 +19,11 @@
  * 
  *      ******* Para realizar o sincronismo do prisma com o BD, devemos executar o seguinte comando:
  *                  npx prisma migrate dev
+ * 
+ * 
+ * ************************
+ * 
+ * POST E PUT PRECISAM DO BodyParserJson para funcionar
  **********************************************************************************************************************/
 
 // Import das bibliotecas para criar a API
@@ -83,6 +88,36 @@ app.get('/v1/controle-jogos/jogo/:id', cors(), async function (request, response
     response.json(resultJogo)
 })
 
-app.listen('8080', function(){
-    console.log('API aguardando Requesições')
+// Endpoint para retornar um delet
+app.delete('/v1/controle-jogos/jogo/:id', cors(), async function(request,response){
+    // Recebendo o id da requisição
+    let idJogo = request.params.id
+
+    let resultJogo = await controllerJogo.excluirJogo(idJogo)
+
+    response.status(resultJogo.status_code)
+    response.json(resultJogo)
+})
+
+app.put('/v1/controle-jogos/jogo/:id', cors(), bodyParserJson ,async function (request,response){
+    // Recebe o contetType da requesição
+    let contentType = request.headers['content-type']
+
+    // Recebe o id Jogo
+    let idJogo = request.params.id
+
+    // Recebe os dados do jogo encaminhando do body da requesição
+    let dadosBody = request.body
+
+    let resultJogo = await controllerJogo.atualizarJogo(dadosBody,idJogo,contentType)
+
+    response.status(resultJogo.status_code)
+    response.json(resultJogo)
+})
+
+
+
+
+app.listen('3030', function(){
+    console.log('API aguardando Requesições...')
 })
