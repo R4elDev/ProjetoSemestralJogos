@@ -157,3 +157,11 @@ const buscarPlataforma = async function(id){
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
+
+module.exports = {
+    inserirPlataforma,
+    atualizarPlataforma,
+    buscarPlataforma,
+    excluirPlataforma,
+    listarPlataforma
+}

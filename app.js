@@ -33,6 +33,7 @@ const bodyParser = require('body-parser')
 
 // Import das controles para realizar o CRUD de dados
 const controllerJogo = require('./controller/jogo/controllerJogo.js')
+const controllerPlataforma = require('./controller/plataforma/controllerPlataforma.js')
 
 
 // Estabelecendo o formato de dados que deverá chegar no BODY da requisição (POST ou PUT)
@@ -50,6 +51,9 @@ app.use((request, response, next) =>{
 })
 
 
+
+// ********************** ENDPOINTS DA TABELA JOGO ***************************** //
+
 // EndPoint para inserir um jogo no banco de dados
 app.post('/v1/controle-jogos/jogo', cors(), bodyParserJson, async function(request, response){
 
@@ -65,7 +69,6 @@ app.post('/v1/controle-jogos/jogo', cors(), bodyParserJson, async function(reque
     response.status(resultJogo.status_code)
     response.json(resultJogo)
 })
-
 
 // EndPoint para retornar uma lista de jogos
 app.get('/v1/controle-jogos/jogo', cors(), async function (request, response){
@@ -115,7 +118,69 @@ app.put('/v1/controle-jogos/jogo/:id', cors(), bodyParserJson ,async function (r
     response.json(resultJogo)
 })
 
+// ********************** ENDPOINTS DA TABELA PLATAFORMA ***************************** //
 
+// EndPoint para inserir uma plataforma no banco de dados
+app.post('/v1/contole-jogos/plataforma', cors(),bodyParser,async function(request, response) {
+    
+    //Recebe o content-type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    // Recebe o conteúdo do body da requesição em JSON ( deve chegar.. )
+    let dadosBody = request.body
+
+    // Encaminhando os dados do body da requisição para a controller inserir no banco de dados
+    let resultPlataforma = await controllerPlataforma.inserirPlataforma(dadosBody,contentType)
+
+    response.status(resultPlataforma.status_code)
+    response.json(resultPlataforma)
+})
+
+// EndPoint para retornar uma lista de plataformas
+app.get('/v1/controle-jogos/plataforma', cors(),bodyParser, async function(request,response){
+    // Chama a função para listar todas as plataformas
+    let resultPlataforma = await controllerPlataforma.listarPlataforma()
+
+    response.status(resultPlataforma.status_code)
+    response.json(resultPlataforma)
+})
+
+// Endpoint para retornar um jogo pelo ID
+app.get('/v1/controle-jogos/platafoma/:id', cors(),async function (request,response){
+    let idPlataforma = request.params.id
+
+    let resultPlataforma = await controllerPlataforma.buscarPlataforma(idPlataforma)
+
+    response.status(resultPlataforma.status_code)
+    response.json(resultJogo)
+})
+
+// Endpoint para retornar um delet
+app.delete('/v1/controle-jogos/plataforma/:id', cors(),async function(request,response){
+    let idPlataforma = request.params.id
+
+    let resultPlataforma = await controllerPlataforma.excluirPlataforma(idPlataforma)
+
+    response.status(resultPlataforma.status_code)
+    response.json(resultPlataforma)
+})
+
+// Endpoint para atualizar uma plataforma
+app.put('/v1/controle-jogos/plataforma/:id', cors(), bodyParser, async function (request,response){
+    // Recebe o contetType da requesição
+    let contentType = request.header['content-type']
+    // Recebe o id da plataforma
+    let idPlataforma = request.params.id
+    // Recebe os dados do jogo encaminhando do body da requesição
+    let dadosBody = request.body
+
+    let resultPlataforma = await controllerPlataforma.atualizarPlataforma(dadosBody,idPlataforma,contentType)
+
+    response.status(resultPlataforma.status_code)
+    response.json(resultJogo)
+
+
+})
 
 
 app.listen('3030', function(){
