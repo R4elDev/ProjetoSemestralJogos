@@ -182,6 +182,10 @@ app.put('/v1/controle-jogos/plataforma/:id', cors(), bodyParser, async function 
 
 })
 
+// ********************** ENDPOINTS DA TABELA VERSAO ***************************** //
+
+
+
 
 app.listen('3030', function(){
     console.log('API aguardando Requesições...')
