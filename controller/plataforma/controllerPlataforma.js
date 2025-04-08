@@ -39,7 +39,7 @@ const inserirPlataforma = async function (plataforma, contentType) {
 // Função para atualizar uma plataforma
 const atualizarPlataforma = async function(plataforma,id,contentType){
     try{
-        if(contentType == 'applicaton/json'){
+        if(contentType == 'application/json'){
             if(
                 plataforma.tipo_de_plataforma == undefined || plataforma.tipo_de_plataforma == '' || plataforma.tipo_de_plataforma == null || plataforma.tipo_de_plataforma.length > 100 ||
                 plataforma.logo               == undefined || plataforma.logo               == '' || plataforma.logo               == null || plataforma.logo.length               > 200 
@@ -51,7 +51,6 @@ const atualizarPlataforma = async function(plataforma,id,contentType){
                 let resultPlataforma = await buscarPlataforma(parseInt(id))
 
                 if(resultPlataforma.status_code == 200){
-
                     
                     plataforma.id = parseInt(id)
                     let result = await plataformaDAO.updatePlataforma(plataforma)
