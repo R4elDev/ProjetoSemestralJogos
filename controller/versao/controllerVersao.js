@@ -149,6 +149,6 @@ module.exports = {
     inserirVersao,
     atualizarVersao,
     buscarVersao,
-    excluirPlataforma,
+    excluirVersao,
     listarVersao
 }

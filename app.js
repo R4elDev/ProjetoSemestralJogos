@@ -34,7 +34,7 @@ const bodyParser = require('body-parser')
 // Import das controles para realizar o CRUD de dados
 const controllerJogo = require('./controller/jogo/controllerJogo.js')
 const controllerPlataforma = require('./controller/plataforma/controllerPlataforma.js')
-
+const controllerVersao = require('./controller/versao/controllerVersao.js')
 
 // Estabelecendo o formato de dados que deverá chegar no BODY da requisição (POST ou PUT)
 const bodyParserJson = bodyParser.json()
@@ -57,7 +57,7 @@ app.use((request, response, next) =>{
 // EndPoint para inserir um jogo no banco de dados
 app.post('/v1/controle-jogos/jogo', cors(), bodyParserJson, async function(request, response){
 
-    //Recene o content-type para validar o tipo de dados da requisição
+    //Recebe o content-type para validar o tipo de dados da requisição
     let contentType = request.headers['content-type']
     
     // Recebe o conteúdo do body da requesição em JSON ( deve chegar.. )
@@ -121,7 +121,7 @@ app.put('/v1/controle-jogos/jogo/:id', cors(), bodyParserJson ,async function (r
 // ********************** ENDPOINTS DA TABELA PLATAFORMA ***************************** //
 
 // EndPoint para inserir uma plataforma no banco de dados
-app.post('/v1/contole-jogos/plataforma', cors(),bodyParser,async function(request, response) {
+app.post('/v1/contole-jogos/plataforma', cors(),bodyParserJson,async function(request, response) {
     
     //Recebe o content-type para validar o tipo de dados da requisição
     let contentType = request.headers['content-type']
@@ -137,7 +137,7 @@ app.post('/v1/contole-jogos/plataforma', cors(),bodyParser,async function(reques
 })
 
 // EndPoint para retornar uma lista de plataformas
-app.get('/v1/controle-jogos/plataforma', cors(),bodyParser, async function(request,response){
+app.get('/v1/controle-jogos/plataforma', cors(),async function(request,response){
     // Chama a função para listar todas as plataformas
     let resultPlataforma = await controllerPlataforma.listarPlataforma()
 
@@ -166,7 +166,7 @@ app.delete('/v1/controle-jogos/plataforma/:id', cors(),async function(request,re
 })
 
 // Endpoint para atualizar uma plataforma
-app.put('/v1/controle-jogos/plataforma/:id', cors(), bodyParser, async function (request,response){
+app.put('/v1/controle-jogos/plataforma/:id', cors(), bodyParserJson, async function (request,response){
     // Recebe o contetType da requesição
     let contentType = request.header['content-type']
     // Recebe o id da plataforma
@@ -184,8 +184,67 @@ app.put('/v1/controle-jogos/plataforma/:id', cors(), bodyParser, async function 
 
 // ********************** ENDPOINTS DA TABELA VERSAO ***************************** //
 
+// EndPoint para inserir uma versao no banco de dados
+app.post('/v1/controle-jogos/versao', cors(),bodyParserJson,async function(request,response){
+    //Recebe o content-type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
 
+    // Recebe o conteúdo do body da requesição em JSON ( deve chegar.. )
+    let dadosBody = request.body
 
+    // Encaminhando os dados do body da requisição para a controller inserir no banco de dados
+    let resultVersao = await controllerVersao.inserirVersao(dadosBody,contentType)
+
+    response.status(resultVersao.status_code)
+    response.json(resultVersao)
+})
+// EndPoint para retornar uma lista de versoes
+app.get('/v1/controle-jogos/versao',cors(),async function (request,response){
+    // Chama a função para listar as versões
+    let resultVersao = await controllerVersao.listarVersao()
+
+    response.status(resultVersao.status_code)
+    response.json(resultVersao)
+})
+
+// Endpoint para retornar uma versao pelo ID
+app.get('/v1/controle-jogos/versao/:id', cors(),async function(request,response){
+    let idVersao = request.params.id
+
+    // Chama a função para retornar uma versão pelo ID
+    let resultVersao = await controllerVersao.buscarVersao(idVersao)
+
+    response.status(resultVersao.status_code)
+    response.json(resultVersao)
+})
+
+// Endpoint para retornar um delet de versao
+app.get('/v1/controle-jogos/versao/:id', cors(), async function (request,response){
+    let idVersao = request.params.id
+
+    // Chama a função para retornar um jogo pelo ID
+    let resultVersao = await controllerVersao.excluirVersao(idVersao)
+
+    response.status(resultVersao.status_code)
+    response.json(resultVersao)
+})
+
+// Endpoint para atualizar uma versao
+app.put('/v1/controle-jogos/versao/:id',cors(),bodyParserJson, async function(request,response){
+    // Recebe o contentType da requesição
+    let contentType = request.headers['content-type']
+
+    // Recebe o idVersao
+    let idVersao = request.params.id
+
+    // Recebe os dados do jogo encaminhando do body da requesição
+    let dadosBody = request.body
+
+    let resultVersao = await controllerVersao.atualizarVersao(dadosBody,idVersao,contentType)
+
+    response.status(resultVersao.status_code)
+    response.json(resultVersao)
+})
 
 app.listen('3030', function(){
     console.log('API aguardando Requesições...')
