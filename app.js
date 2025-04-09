@@ -35,6 +35,8 @@ const bodyParser = require('body-parser')
 const controllerJogo = require('./controller/jogo/controllerJogo.js')
 const controllerPlataforma = require('./controller/plataforma/controllerPlataforma.js')
 const controllerVersao = require('./controller/versao/controllerVersao.js')
+const controllerGenero = require('./controller/genero/controllerGenero.js')
+
 
 // Estabelecendo o formato de dados que deverá chegar no BODY da requisição (POST ou PUT)
 const bodyParserJson = bodyParser.json()
@@ -248,6 +250,63 @@ app.put('/v1/controle-jogos/versao/:id',cors(),bodyParserJson, async function(re
 
 // ********************** ENDPOINTS DA TABELA GENERO ***************************** //
 
+// EndPoint para inserir um jogo no banco de dados
+app.post('/v1/controle-jogos/genero',cors(),bodyParserJson,async function (request,response){
+    // Recebe o content-type para validar o tipo de dados da requisiçãp
+    let contentType = request.headers['content-type']
+
+    // Recebe o conteúdo do body da requesição em JSON ( deve chegar.. )
+    let dadosBody = request.body
+
+    // Encaminhando os dados do body da requisição para a controller inserir no banco de dados
+    let resultGenero = await controllerGenero.inserirGenero(dadosBody,contentType)
+
+    response.status(resultGenero.status_code)
+    response.json(resultGenero)
+})
+
+// EndPoint para retornar uma lista de jogos
+app.get('/v1/controle-jogos/genero',cors(),async function (request,response){
+    // Chama a função para listar os jogos
+    let resultGenero = await controllerGenero.listarGenero()
+
+    response.status(resultGenero.status_code)
+    response.json(resultGenero)
+})
+
+// Endpoint para retornar um jogo pelo ID
+app.get('/v1/controle-jogos/genero/:id',cors(), async function (request,response){
+    let idGenero = request.params.id
+
+    let resultGenero = await controllerGenero.buscarGenero(idGenero)
+
+    response.status(resultGenero.status_code)
+    response.json(resultGenero)
+})
+
+
+// Endpoint para retornar um delet
+app.delete('/v1/controle-jogos/genero/:id',cors(),async function (request,response){
+    let idGenero = request.params.id
+
+    let resulGenero = await controllerGenero.excluirGenero(idGenero)
+
+    response.status(resulGenero.status_code)
+    response.json(resulGenero)
+})
+
+app.put('/v1/controle-jogos/genero/:id',cors(),bodyParserJson,async function (request,response){
+    let contentType = request.headers['content-type']
+
+    let idGenero = request.params.id
+
+    let dadosBody = request.body
+
+    let resultGenero = await controllerGenero.atualizarGenero(dadosBody,idGenero,contentType)
+
+    response.status(resultGenero.status_code)
+    response.json(resultGenero)
+})
 
 app.listen('3030', function(){
     console.log('API aguardando Requesições...')
