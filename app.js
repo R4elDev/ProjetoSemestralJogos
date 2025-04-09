@@ -246,6 +246,9 @@ app.put('/v1/controle-jogos/versao/:id',cors(),bodyParserJson, async function(re
     response.json(resultVersao)
 })
 
+// ********************** ENDPOINTS DA TABELA GENERO ***************************** //
+
+
 app.listen('3030', function(){
     console.log('API aguardando Requesições...')
 })
