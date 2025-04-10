@@ -148,8 +148,7 @@ const listarJogo = async function() {
 
 }
 // Função para buscar um jogo pelo ID
-const buscarJogo = async function(id) {
-    
+const buscarJogo = async function(id) { 
     try{
 
         let idJogo = id
