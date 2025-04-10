@@ -14,20 +14,18 @@ const prisma = new PrismaClient()
 // Função para inserir no Banco De Dados um novo Jogo
 const insertClassificacao = async function (classificacao){
     try{
-        let sql = `insert into tbl_classificacao(tipo_de_classificacao)
-        values(
-            '${classificacao.tipo_de_classificacao}
-        );`
+        let sql = `insert into tbl_classificacao(tipo_de_classificacao)values('${classificacao.tipo_de_classificacao}');`
 
         // Executa o script SQL no BD e aguarda o retorno no BD
         let result = await prisma.$executeRawUnsafe(sql)
 
         if(result){
             return true
-        } else{
+        }else{
             return false
         }
     }catch(error){
+        console.log(error)
         return false
     }
 }

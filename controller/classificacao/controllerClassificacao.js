@@ -23,7 +23,7 @@ const inserirClassificacao = async function(classificacao, contentType){
                 let resultClassificacao = await classificacaoDAO.insertClassificacao(classificacao)
 
                 if(resultClassificacao){
-                    return MESSAGE.SUCCESS_DELETED_ITEM
+                    return MESSAGE.SUCCESS_CREATED_ITEM
                 }else{
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
                 }
