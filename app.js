@@ -37,6 +37,7 @@ const controllerPlataforma = require('./controller/plataforma/controllerPlatafor
 const controllerVersao = require('./controller/versao/controllerVersao.js')
 const controllerGenero = require('./controller/genero/controllerGenero.js')
 const controllerClassificacao = require('./controller/classificacao/controllerClassificacao.js')
+const controllerDesenvolvedora = require('./controller/desenvolvedora/controllerDesenvolvedora.js')
 
 
 // Estabelecendo o formato de dados que deverá chegar no BODY da requisição (POST ou PUT)
@@ -367,6 +368,73 @@ app.put('/v1/controle-jogos/classificacao', cors(), bodyParserJson, async functi
     response.json(resultClassificacao)
 })
 
+// ********************** ENDPOINTS DA TABELA DESENVOLVEDORA***************************** //
+
+
+// EndPoint para inserir uma desenvolvedora no banco de dados
+app.post('/v1/controle-jogos/desenvolvedora', cors(), bodyParserJson, async function(request, response){
+
+    //Recebe o content-type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+    
+    // Recebe o conteúdo do body da requesição em JSON ( deve chegar.. )
+    let dadosBody = request.body
+
+    // Encaminhando os dados do body da requisição para a controller inserir no banco de dados
+    let resultDesenvolvedora = await controllerDesenvolvedora.inserirDesenvolvedora(dadosBody,contentType)
+
+    response.status(resultDesenvolvedora.status_code)
+    response.json(resultDesenvolvedora)
+})
+
+// EndPoint para retornar uma lista de desenvolvedoras
+app.get('/v1/controle-jogos/desenvolvedora', cors(), async function (request, response){
+
+    // Chama a função para listar os jogos
+    let resultDesenvolvedora = await controllerDesenvolvedora.listarDesenvolvedora()
+
+    response.status(resultDesenvolvedora.status_code)
+    response.json(resultDesenvolvedora)
+})
+
+// Endpoint para retornar uma desenvolvedora pelo ID
+app.get('/v1/controle-jogos/desenvolvedora/:id', cors(), async function (request, response){
+
+    let idDesenvolvedora = request.params.id
+    // Chama a função para retornar um jogo pelo ID
+    let resultDesenvolvedora = await controllerDesenvolvedora.buscarDesenvolvedora(idDesenvolvedora)
+
+    response.status(resultDesenvolvedora.status_code)
+    response.json(resultDesenvolvedora)
+})
+
+// Endpoint para retornar um delet
+app.delete('/v1/controle-jogos/desenvolvedora/:id', cors(), async function(request,response){
+    // Recebendo o id da requisição
+    let idDesenvolvedora = request.params.id
+
+    let resultDesenvolvedora = await controllerDesenvolvedora.excluirDesenvolvedora(idDesenvolvedora)
+
+    response.status(resultDesenvolvedora.status_code)
+    response.json(resultDesenvolvedora)
+})
+
+// Endpoint para atualizar uma desenvolvedora
+app.put('/v1/controle-jogos/desenvolvedora/:id', cors(), bodyParserJson ,async function (request,response){
+    // Recebe o contetType da requesição
+    let contentType = request.headers['content-type']
+
+    // Recebe o id Jogo
+    let idDesenvolvedora = request.params.id
+
+    // Recebe os dados do jogo encaminhando do body da requesição
+    let dadosBody = request.body
+
+    let resultDesenvolvedora = await controllerDesenvolvedora.atualizarDesenvolvedora(dadosBody,idDesenvolvedora,contentType)
+
+    response.status(resultDesenvolvedora.status_code)
+    response.json(resultDesenvolvedora)
+})
 
 app.listen('3030', function(){
     console.log('API aguardando Requesições...')
