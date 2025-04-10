@@ -36,6 +36,7 @@ const controllerJogo = require('./controller/jogo/controllerJogo.js')
 const controllerPlataforma = require('./controller/plataforma/controllerPlataforma.js')
 const controllerVersao = require('./controller/versao/controllerVersao.js')
 const controllerGenero = require('./controller/genero/controllerGenero.js')
+const controllerClassificacao = require('./controller/classificacao/controllerClassificacao.js')
 
 
 // Estabelecendo o formato de dados que deverá chegar no BODY da requisição (POST ou PUT)
@@ -104,6 +105,7 @@ app.delete('/v1/controle-jogos/jogo/:id', cors(), async function(request,respons
     response.json(resultJogo)
 })
 
+// Endpoint para atualizar um jogo
 app.put('/v1/controle-jogos/jogo/:id', cors(), bodyParserJson ,async function (request,response){
     // Recebe o contetType da requesição
     let contentType = request.headers['content-type']
@@ -307,6 +309,64 @@ app.put('/v1/controle-jogos/genero/:id',cors(),bodyParserJson,async function (re
     response.status(resultGenero.status_code)
     response.json(resultGenero)
 })
+
+// ********************** ENDPOINTS DA TABELA CLASSIFICACAO ***************************** //
+
+// EndPoint para inserir um jogo no banco de dados
+app.post('/v1/controle-jogos/classificacao', cors(), bodyParserJson, async function(request,response){
+    let contentType = request.headers['content-type']
+
+    let dadosBody = request.body
+
+    let resultClassificacao = await controllerClassificacao.inserirClassificacao(dadosBody,contentType)
+
+    response.status(resultClassificacao.status_code)
+    response.json(resultClassificacao)
+})
+
+// EndPoint para retornar uma lista de jogos
+app.get('/v1/controle-jogos/classificacao', cors(),async function(request,response){
+    let resultClassificacao = await controllerClassificacao.listarClassificacao()
+
+    response.status(resultClassificacao.status_code)
+    response.json(resultClassificacao)
+})
+
+// Endpoint para retornar um jogo pelo ID
+app.get('/v1/controle-jogos/classificacao:id', cors(), async function(request,response){
+    let idClassificacao = request.params.id
+
+    let resultClassificacao = await controllerClassificacao.buscarClassificacao(idClassificacao)
+
+    response.status(resultClassificacao.status_code)
+    response.json(resultClassificacao)
+})
+
+
+// Endpoint para retornar um delet
+app.delete('/v1/controle-jogos/classificacao:id', cors(), async function(request,response){
+    let idClassificacao = request.params.id
+
+    let resultClassificacao = await controllerClassificacao.excluirClassificacao(idClassificacao)
+
+    response.status(resultClassificacao.status_code)
+    response.json(resultJogo)
+})
+
+// Endpoint para atualizar uma plataforma
+app.put('/v1/controle-jogos/classificacao', cors(), bodyParserJson, async function(request,response){
+    let contentType = request.headers['content-type']
+
+    let idClassificacao = request.params.id
+
+    let dadosBody = request.body
+
+    let resultClassificacao = await controllerClassificacao.atualizarClassificacao(dadosBody,idClassificacao,contentType)
+
+    response.status(resultClassificacao.status_code)
+    response.json(resultClassificacao)
+})
+
 
 app.listen('3030', function(){
     console.log('API aguardando Requesições...')
