@@ -44,10 +44,36 @@ create table tbl_desenvolvedora(
     link                      varchar(200) not null
 );
 
+
+/**TABELAS DE RELACIONAMENTO **/
+create table tbl_plataforma_jogo(
+	id int not null primary key auto_increment,
+    id_plataforma int not null,
+    id_jogo int not null,
+    id_versao int not null,
+    hardware varchar(150) not null
+);
+
+create table tbl_jogo_genero(
+	id int not null primary key auto_increment,
+    id_jogo int not null,
+    id_genero int not null
+);
+
+create table tbl_jogo_desenvolvedora(
+	id int not null primary key auto_increment,
+    id_jogo int not null,
+    id_desenvolvedora int not null
+);
+
+
 alter table tbl_desenvolvedora add column nome varchar(200) not null;
+alter table tbl_jogo add column id_classificacao int not null;
 
-
+/*CRIANDO CHAVES ESTRANGEIRAS*/
+alter table tbl_jogo add constraint fk_classificacao foreign key (id_classificacao) references tbl_classificacao(id);
+alter table tbl_plataforma_jogo add constraint fk_plataforma foreign key (id_plataforma) references tbl_plataforma(id)
 
 show tables;
-desc tbl_desenvolvedora;
+desc tbl_jogo;
 select * from tbl_jogo;

@@ -162,12 +162,13 @@ const buscarJogo = async function(id) {
             let resultJogo = await jogoDAO.selectByIdJogo(parseInt(idJogo))
             if(resultJogo != false || typeof(resultJogo) == 'object'){
                 if(resultJogo.length > 0){
-                    // Cria um objeto do tipo JSON pararetornar a lista de jogos
+                    // Cria um objeto do tipo JSON para retornar a lista de jogos
                     dadosJogos.status = true
                     dadosJogos.status_code = 200
                     dadosJogos.games = resultJogo
-
+                
                     return dadosJogos // 200
+
                 }else{
                     return MESSAGE.ERROR_NOT_FOUND // 404
                 }
@@ -179,7 +180,6 @@ const buscarJogo = async function(id) {
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
-
 
 module.exports = {
     inserirJogo,
