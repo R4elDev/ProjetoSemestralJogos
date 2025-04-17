@@ -18,7 +18,8 @@ const insertGenero = async function (genero){
     try{
         let sql = `insert into tbl_genero(tipo_de_genero)
         values(
-        ${genero.tipo_de_genero});`
+        '${genero.tipo_de_genero}'
+        );`
 
         // Executa o script SQL no BD e AGUARDA o retorno do BD
         let result = await prisma.$executeRawUnsafe(sql)

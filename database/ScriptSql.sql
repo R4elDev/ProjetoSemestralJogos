@@ -44,9 +44,10 @@ create table tbl_desenvolvedora(
     link                      varchar(200) not null
 );
 
+alter table tbl_desenvolvedora add column nome varchar(200) not null;
 
 
 
 show tables;
-desc tbl_jogo;
+desc tbl_desenvolvedora;
 select * from tbl_jogo;

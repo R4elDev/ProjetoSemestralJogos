@@ -28,7 +28,7 @@ const ERROR_INTERNAL_SERVER_MODEL = {
 const ERROR_CONTENT_TYPE = {
     status:false,
     status_code:415,
-    message:"Não foi possível processar a requisição pois o formato de dadoos encaimnhado não é suportado pelo servidor.Favor encaminhar apenas JSON !!"
+    message:"Não foi possível processar a requisição pois o formato de dados encaminhado não é suportado pelo servidor.Favor encaminhar apenas JSON !!"
 }
 
 const ERROR_NOT_FOUND = {

@@ -150,14 +150,14 @@ app.get('/v1/controle-jogos/plataforma', cors(),async function(request,response)
     response.json(resultPlataforma)
 })
 
-// Endpoint para retornar um jogo pelo ID
+// Endpoint para retornar uma plataforma pelo ID
 app.get('/v1/controle-jogos/platafoma/:id', cors(),async function (request,response){
     let idPlataforma = request.params.id
 
     let resultPlataforma = await controllerPlataforma.buscarPlataforma(idPlataforma)
 
     response.status(resultPlataforma.status_code)
-    response.json(resultJogo)
+    response.json(resultPlataforma)
 })
 
 // Endpoint para retornar um delet
@@ -173,7 +173,9 @@ app.delete('/v1/controle-jogos/plataforma/:id', cors(),async function(request,re
 // Endpoint para atualizar uma plataforma
 app.put('/v1/controle-jogos/plataforma/:id', cors(), bodyParserJson, async function (request,response){
     // Recebe o contetType da requesição
-    let contentType = request.header['content-type']
+    let contentType = request.headers['content-type']
+
+    
     // Recebe o id da plataforma
     let idPlataforma = request.params.id
     // Recebe os dados do jogo encaminhando do body da requesição
@@ -182,7 +184,7 @@ app.put('/v1/controle-jogos/plataforma/:id', cors(), bodyParserJson, async funct
     let resultPlataforma = await controllerPlataforma.atualizarPlataforma(dadosBody,idPlataforma,contentType)
 
     response.status(resultPlataforma.status_code)
-    response.json(resultJogo)
+    response.json(resultPlataforma)
 
 
 })
@@ -224,7 +226,7 @@ app.get('/v1/controle-jogos/versao/:id', cors(),async function(request,response)
 })
 
 // Endpoint para retornar um delet de versao
-app.get('/v1/controle-jogos/versao/:id', cors(), async function (request,response){
+app.delete('/v1/controle-jogos/versao/:id', cors(), async function (request,response){
     let idVersao = request.params.id
 
     // Chama a função para retornar um jogo pelo ID
@@ -244,7 +246,7 @@ app.put('/v1/controle-jogos/versao/:id',cors(),bodyParserJson, async function(re
 
     // Recebe os dados do jogo encaminhando do body da requesição
     let dadosBody = request.body
-
+    
     let resultVersao = await controllerVersao.atualizarVersao(dadosBody,idVersao,contentType)
 
     response.status(resultVersao.status_code)
@@ -313,7 +315,7 @@ app.put('/v1/controle-jogos/genero/:id',cors(),bodyParserJson,async function (re
 
 // ********************** ENDPOINTS DA TABELA CLASSIFICACAO ***************************** //
 
-// EndPoint para inserir um jogo no banco de dados
+// EndPoint para inserir uma CLASSIFICACAO no banco de dados
 app.post('/v1/controle-jogos/classificacao', cors(), bodyParserJson, async function(request,response){
     let contentType = request.headers['content-type']
 
@@ -325,7 +327,7 @@ app.post('/v1/controle-jogos/classificacao', cors(), bodyParserJson, async funct
     response.json(resultClassificacao)
 })
 
-// EndPoint para retornar uma lista de jogos
+// EndPoint para retornar uma lista de classificacoes
 app.get('/v1/controle-jogos/classificacao', cors(),async function(request,response){
     let resultClassificacao = await controllerClassificacao.listarClassificacao()
 
@@ -333,8 +335,8 @@ app.get('/v1/controle-jogos/classificacao', cors(),async function(request,respon
     response.json(resultClassificacao)
 })
 
-// Endpoint para retornar um jogo pelo ID
-app.get('/v1/controle-jogos/classificacao:id', cors(), async function(request,response){
+// Endpoint para retornar uma classificacao pelo ID
+app.get('/v1/controle-jogos/classificacao/:id', cors(), async function(request,response){
     let idClassificacao = request.params.id
 
     let resultClassificacao = await controllerClassificacao.buscarClassificacao(idClassificacao)
@@ -345,17 +347,17 @@ app.get('/v1/controle-jogos/classificacao:id', cors(), async function(request,re
 
 
 // Endpoint para retornar um delet
-app.delete('/v1/controle-jogos/classificacao:id', cors(), async function(request,response){
+app.delete('/v1/controle-jogos/classificacao/:id', cors(), async function(request,response){
     let idClassificacao = request.params.id
 
     let resultClassificacao = await controllerClassificacao.excluirClassificacao(idClassificacao)
 
     response.status(resultClassificacao.status_code)
-    response.json(resultJogo)
+    response.json(resultClassificacao)
 })
 
-// Endpoint para atualizar uma plataforma
-app.put('/v1/controle-jogos/classificacao', cors(), bodyParserJson, async function(request,response){
+// Endpoint para atualizar uma classificacao
+app.put('/v1/controle-jogos/classificacao/:id', cors(), bodyParserJson, async function(request,response){
     let contentType = request.headers['content-type']
 
     let idClassificacao = request.params.id

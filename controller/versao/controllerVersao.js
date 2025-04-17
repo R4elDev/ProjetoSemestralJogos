@@ -36,6 +36,7 @@ const atualizarVersao = async function (versao,id, contentType){
     try{
         if(contentType == 'application/json'){
             if(versao.tipo_de_versao == undefined || versao.tipo_de_versao == '' || versao.tipo_de_versao == null || versao.tipo_de_versao.length > 45){
+                
                 return MESSAGE.ERROR_REQUIRED_FIELDS // 400
             }else{
                 // Valida se o id existe no banco
@@ -115,7 +116,7 @@ const listarVersao = async function(){
     }
 }
 // Função para buscar uma versão pelo ID
-const buscarVersao = async function(){
+const buscarVersao = async function(id){
     try{
         let idVersao = id
 
@@ -141,6 +142,7 @@ const buscarVersao = async function(){
             }
         }
     }catch(error){
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }

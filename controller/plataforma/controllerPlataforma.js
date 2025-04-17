@@ -123,6 +123,7 @@ const listarPlataforma = async function(){
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
         }
     }catch(error){
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }

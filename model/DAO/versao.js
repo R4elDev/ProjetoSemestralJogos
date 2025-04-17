@@ -33,7 +33,7 @@ const insertVersao = async function(versao){
 
 const updateVersao = async function (versao){
     try{
-        let sql = `update tbl_versao set tipo_de_versao = '${versao.tipo_de_plataforma}'`
+        let sql = `update tbl_versao set tipo_de_versao = '${versao.tipo_de_versao}'`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -52,6 +52,8 @@ const deleteVersao = async function (id){
         let idVersao = id
 
         let sql = `delete from tbl_versao where id=${idVersao}`
+
+        let result = await prisma.$executeRawUnsafe(sql)
 
         if(result){
             return true

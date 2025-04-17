@@ -57,6 +57,8 @@ const deletePlataforma = async function (id){
 
         let sql = `delete from tbl_plataforma where id=${idJogo}`
 
+        let result = await prisma.$executeRawUnsafe(sql)
+
         if(result){
             return true
         }else{

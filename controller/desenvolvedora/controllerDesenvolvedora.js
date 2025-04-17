@@ -17,8 +17,9 @@ const inserirDesenvolvedora = async function(desenvolvedora, contentType) {
         if(contentType == 'application/json'){
             if(
                 desenvolvedora.logo           == undefined ||            desenvolvedora.logo            == '' ||            desenvolvedora.logo            == null || desenvolvedora.logo.length   > 200 ||
-                desenvolvedora.link           == undefined ||            desenvolvedora.link            == '' ||            desenvolvedora.link            == null || desenvolvedora.link.length   > 200
-            ){
+                desenvolvedora.link           == undefined ||            desenvolvedora.link            == '' ||            desenvolvedora.link            == null || desenvolvedora.link.length   > 200 ||
+                desenvolvedora.nome           == undefined ||            desenvolvedora.nome            == '' ||            desenvolvedora.nome            == null || desenvolvedora.nome.length   > 200
+             ){
                 return MESSAGE.ERROR_REQUIRED_FIELDS // 400
             }else{
         
@@ -44,7 +45,8 @@ const atualizarDesenvolvedora = async function(desenvolvedora,id,contentType) {
         if(contentType == 'application/json'){
             if(
                 desenvolvedora.logo           == undefined ||            desenvolvedora.logo            == '' ||            desenvolvedora.logo            == null || desenvolvedora.logo.length   > 200 ||
-                desenvolvedora.link           == undefined ||            desenvolvedora.link            == '' ||            desenvolvedora.link            == null || desenvolvedora.link.length   > 200
+                desenvolvedora.link           == undefined ||            desenvolvedora.link            == '' ||            desenvolvedora.link            == null || desenvolvedora.link.length   > 200 ||
+                desenvolvedora.nome           == undefined ||            desenvolvedora.nome            == '' ||            desenvolvedora.nome            == null || desenvolvedora.nome.length   > 200
             ){
                 return MESSAGE.ERROR_REQUIRED_FIELDS // 400
             }else{
@@ -55,7 +57,7 @@ const atualizarDesenvolvedora = async function(desenvolvedora,id,contentType) {
                 if(resultDesenvolvedora.status_code == 200){
 
                     // Adiciona um atributo id no Json para encaminhasr id da requisição
-                    jogo.id = parseInt(id)
+                    desenvolvedora.id = parseInt(id)
                     let result = await desenvolvedoraDAO.updateDesenvolvedora(desenvolvedora)
 
                     if(result){
@@ -74,6 +76,7 @@ const atualizarDesenvolvedora = async function(desenvolvedora,id,contentType) {
             return MESSAGE.ERROR_CONTENT_TYPE // 400
         }    
     }catch(error){
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
@@ -119,7 +122,7 @@ const listarDesenvolvedora = async function() {
                 //Cria um objeto do tipo JSON para retornar a lista de jogos
                 dadosDesenvolvedora.status = true
                 dadosDesenvolvedora.status_code = 200
-                dadosDesenvolvedora.items = resultJogo.length
+                dadosDesenvolvedora.items = resultDesenvolvedora.length
                 dadosDesenvolvedora.games = resultDesenvolvedora
 
                 return dadosDesenvolvedora // 200
@@ -130,6 +133,7 @@ const listarDesenvolvedora = async function() {
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
         }
     }catch(error){
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
     }
 

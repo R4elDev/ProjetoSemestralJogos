@@ -16,10 +16,11 @@ const prisma = new PrismaClient()
 // Função para inserir no Banco De Dados uma nova desenvolvedora
 const insertDesenvolvedora = async function(desenvolvedora){
     try{
-        let sql = `insert into tbl_desenvolvedora(logo,link)
+        let sql = `insert into tbl_desenvolvedora(logo,link,nome)
         values(
             '${desenvolvedora.logo}',
-            '${desenvolvedora.link}'
+            '${desenvolvedora.link}',
+            '${desenvolvedora.nome}'
         );` 
 
         let result = await prisma.$executeRawUnsafe(sql)
@@ -37,7 +38,7 @@ const insertDesenvolvedora = async function(desenvolvedora){
 // Função para atualizar no Banco De Dados uma desenvolvedora existente
 const updateDesenvolvedora = async function(desenvolvedora){
     try{
-        let sql = `update tbl_desenvolvedora set logo = '${desenvolvedora.logo}', link = '${desenvolvedora.link}' where id = ${desenvolvedora.id}`
+        let sql = `update tbl_desenvolvedora set logo = '${desenvolvedora.logo}', link = '${desenvolvedora.link}', nome = '${desenvolvedora.nome}' where id = ${desenvolvedora.id}`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
