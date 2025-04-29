@@ -102,7 +102,7 @@ const listarVersao = async function(){
                 dadosVersoes.status = true
                 dadosVersoes.status_code = 200
                 dadosVersoes.items = resultVersoes.length
-                dadosVersoes.plataforma = resultVersoes
+                dadosVersoes.versao = resultVersoes
 
                 return dadosVersoes
             }else{

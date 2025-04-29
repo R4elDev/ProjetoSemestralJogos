@@ -151,7 +151,7 @@ app.get('/v1/controle-jogos/plataforma', cors(),async function(request,response)
 })
 
 // Endpoint para retornar uma plataforma pelo ID
-app.get('/v1/controle-jogos/platafoma/:id', cors(),async function (request,response){
+app.get('/v1/controle-jogos/plataforma/:id', cors(),async function (request,response){
     let idPlataforma = request.params.id
 
     let resultPlataforma = await controllerPlataforma.buscarPlataforma(idPlataforma)

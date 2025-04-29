@@ -123,7 +123,7 @@ const listarDesenvolvedora = async function() {
                 dadosDesenvolvedora.status = true
                 dadosDesenvolvedora.status_code = 200
                 dadosDesenvolvedora.items = resultDesenvolvedora.length
-                dadosDesenvolvedora.games = resultDesenvolvedora
+                dadosDesenvolvedora.desenvolvedoras = resultDesenvolvedora
 
                 return dadosDesenvolvedora // 200
             }else{
@@ -158,7 +158,7 @@ const buscarDesenvolvedora = async function(id) {
                     // Cria um objeto do tipo JSON pararetornar a lista de jogos
                     dadosDesenvolvedora.status = true
                     dadosDesenvolvedora.status_code = 200
-                    dadosDesenvolvedora.games = resultDesenvolvedora
+                    dadosDesenvolvedora.desenvolvedoras = resultDesenvolvedora
 
                     return dadosDesenvolvedora // 200
                 }else{

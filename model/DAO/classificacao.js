@@ -25,7 +25,6 @@ const insertClassificacao = async function (classificacao){
             return false
         }
     }catch(error){
-        console.log(error)
         return false
     }
 }
