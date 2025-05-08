@@ -18,8 +18,9 @@ const insertPlataformaJogo = async function(PlataformaJogo){
   
         let sql = `insert into tbl_plataforma_jogo  (id_plataforma,id_jogo,hardware) 
         values(
-            '${PlataformaJogo.id_filme}',
-            '${PlataformaJogo.id_genero}',
+            '${PlataformaJogo.id_plataforma}',
+            '${PlataformaJogo.id_jogo}',
+            '${PlataformaJogo.id_versao}'
             '${PlataformaJogo.hardware}'
         );`
   
@@ -42,6 +43,7 @@ const updatePlataformaJogo = async function(PlataformaJogo){
     try {
         let sql = `update tbl_plataforma_jogo set     id_plataforma       = '${PlataformaJogo.id_plataforma}',
                                                       id_jogo             = '${PlataformaJogo.id_jogo}',
+                                                      id_versao           = '${PlataformaJogo.id_versao}'
                                                       hardware            = '${PlataformaJogo.hardware}'
                                                       where id = ${PlataformaJogo.id}`
         let resultPlataformaJogo = await prisma.$executeRawUnsafe(sql)
@@ -111,10 +113,141 @@ const selectByIdPlataformaJogo = async function(id){
     }
 }
 
+
+
+
+const selectVersaoByIdJogo = async function (idJogo){
+  try{
+    let sql= `select tbl_versao.* from tbl_jogo
+                    inner join tbl_plataforma_jogo
+                      on tbl_jogo.id = tbl_plataforma_jogo.id_jogo
+                    inner join tbl_versao
+                      on tbl_versao.id = tbl_plataforma_jogo.id_versao
+                  where tbl_jogo.id = ${idJogo}`
+
+    let result = await prisma.$queryRawUnsafe(sql)
+
+    if(result){
+      return result
+    }else{
+      return false
+    }
+  }catch(error){
+    return false
+  }
+}
+
+const selectJogoByIdVersao = async function (idVersao){
+  try{
+    let sql= `select tbl_jogo.* from tbl_versao
+                    inner join tbl_plataforma_jogo
+                      on tbl_versao.id = tbl_plataforma_jogo.id_versao
+                    inner join tbl_jogo
+                      on tbl_jogo.id = tbl_plataforma_jogo.id_jogo
+                  where tbl_versao.id = ${idVersao}`
+
+    let result = await prisma.$queryRawUnsafe(sql)
+
+    if(result){
+      return result
+    }else{
+      return false
+    }
+  }catch(error){
+    return false
+  }
+}
+
+const selectVersaoBydIdPlataforma = async function (idPlataforma){
+  try{
+    let sql= `select tbl_versao.* from tbl_plataforma
+                    inner join tbl_plataforma_jogo
+                      on tbl_versao.id = tbl_plataforma_jogo.id_versao
+                    inner join tbl_plataforma
+                      on tbl_plataforma.id = tbl_plataforma_jogo.id_plataforma
+                  where tbl_plataforma.id = ${idJogo}`
+
+    let result = await prisma.$queryRawUnsafe(sql)
+
+    if(result){
+      return result
+    }else{
+      return false
+    }
+  }catch(error){
+    return false
+  }
+}
+
+const selectPlataformaByIdVersao = async function (idVersao){
+  try{
+    let sql= `select tbl_plataforma.* from tbl_plataforma
+                    inner join tbl_plataforma_jogo
+                      on tbl_versao.id = tbl_plataforma_jogo.id_versao
+                    inner join tbl_plataforma
+                      on tbl_plataforma.id = tbl_plataforma_jogo.id_plataforma
+                  where tbl_versao.id = ${idJogo}`
+
+    let result = await prisma.$queryRawUnsafe(sql)
+
+    if(result){
+      return result
+    }else{
+      return false
+    }
+  }catch(error){
+    return false
+  }
+}
+
+
+const selectPlataformaByIdJogo = async function(idJogo){
+  try{
+    let sql= `select tbl_plataforma.* from tbl_jogo
+                    inner join tbl_plataforma_jogo
+                      on tbl_jogo.id = tbl_plataforma_jogo.id_jogo
+                    inner join tbl_plataforma
+                      on tbl_plataforma.id = tbl_plataforma_jogo.id_plataforma
+                  where tbl_jogo.id = ${idJogo}`
+
+    let result = await prisma.$queryRawUnsafe(sql)
+
+    if(result){
+      return result
+    }else{
+      return false
+    }
+  }catch(error){
+    return false
+  }
+}
+
+const selectJogoByIdPlataforma = async function(idPlataforma){
+  try {
+    let sql = `select tbl_jogo.* from tbl_plataforma 
+                        inner join tbl_plataforma_jogo
+                          on tbl_plataforma.id = tbl_jogo_plataforma.id_plataforma
+                        inner join tbl_jogo
+                          on tbl_jogo.id = tbl_jogo_plataforma.id_jogo
+                    where tbl_plataforma.id = ${idPlataforma}`
+
+    let result = await prisma.$queryRawUnsafe(sql)
+
+    if (result)
+      return result
+    else 
+      return false
+} catch (error) {
+    return false
+}
+}
+
 module.exports = {
     insertPlataformaJogo,
     updatePlataformaJogo,
     deletePlataformaJogo,
     selectAllPlataformaJogo,
-    selectByIdPlataformaJogo
+    selectByIdPlataformaJogo,
+    selectPlataformaByIdJogo,
+    selectJogoByIdPlataforma
 }

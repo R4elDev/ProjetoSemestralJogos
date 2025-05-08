@@ -13,6 +13,7 @@ const jogoDAO = require('../../model/DAO/jogo.js')
 
 //Import das controlleres para criar as relações com o jogo
 const controllerClassificacao = require('../classificacao/controllerClassificacao.js')
+const controllerPlataformaJogo = require('./controllerPlataformaJogo.js')
 
 // Função para inserir um novo jogo
 const inserirJogo = async function(jogo, contentType) {
@@ -156,6 +157,9 @@ const listarJogo = async function() {
                     delete itemJogo.id_classificacao
                     //Adiciona o JSON do jogo, agora com os dados da classificação
                     //em um array
+                    let dadosPlataformaJogo = await controllerPlataformaJogo.buscarPlataformaPorJogo(itemJogo.id)
+                    itemJogo.plataforma = dadosPlataformaJogo
+
                     arrayJogos.push(itemJogo)
                 }
 
