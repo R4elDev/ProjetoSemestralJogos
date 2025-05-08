@@ -23,7 +23,7 @@ const prisma = new PrismaClient()
 const insertJogo = async function (jogo) {
 
     try {
-        let sql = `insert into tbl_jogo(nome,data_lancamento,versao,tamanho,descricao,foto_capa,link)
+        let sql = `insert into tbl_jogo(nome,data_lancamento,versao,tamanho,descricao,foto_capa,link,id_classificacao)
     values(
         '${jogo.nome}',
         '${jogo.data_lancamento}',
@@ -31,7 +31,8 @@ const insertJogo = async function (jogo) {
         '${jogo.tamanho}',
         '${jogo.descricao}',
         '${jogo.foto_capa}',
-        '${jogo.link}'
+        '${jogo.link}',
+        '${jogo.id_classificacao}'
     );`
 
         // Executa o script SQL no BD e AGUARDA O retorno no BD
@@ -43,7 +44,6 @@ const insertJogo = async function (jogo) {
             return false
         }
     } catch (error) {
-        console.log(error)
         return false
     }
 }
@@ -56,7 +56,8 @@ const updateJogo = async function (jogo) {
                                          tamanho = '${jogo.tamanho}', 
                                          descricao = '${jogo.descricao}', 
                                          foto_capa = '${jogo.foto_capa}', 
-                                         link = '${jogo.link}' 
+                                         link = '${jogo.link}' ,
+                                         id_classificacao = '${jogo.id_classificacao}'
                                          where id = ${jogo.id}`
 
         let result = await prisma.$executeRawUnsafe(sql)

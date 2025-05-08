@@ -11,6 +11,9 @@ const MESSAGE = require('../../modulo/config.js')
 // Import do DAO para realizar o CRUD no Banco de Dados
 const jogoDAO = require('../../model/DAO/jogo.js')
 
+//Import das controlleres para criar as relações com o jogo
+const controllerClassificacao = require('../classificacao/controllerClassificacao.js')
+
 // Função para inserir um novo jogo
 const inserirJogo = async function(jogo, contentType) {
     try{
@@ -22,7 +25,8 @@ const inserirJogo = async function(jogo, contentType) {
                 jogo.tamanho         == undefined ||            jogo.tamanho.length   > 10 ||
                 jogo.descricao       == undefined ||
                 jogo.foto_capa       == undefined ||            jogo.foto_capa.length > 200 ||
-                jogo.link            == undefined ||            jogo.link.length > 200
+                jogo.link            == undefined ||            jogo.link.length > 200 ||
+                jogo.id_classificacao == ''       ||            jogo.id_classificacao == undefined
             ){
                 return MESSAGE.ERROR_REQUIRED_FIELDS // 400
             }else{
@@ -48,14 +52,15 @@ const atualizarJogo = async function(jogo,id,contentType) {
     try{
         if(contentType == 'application/json'){
             if(
-                jogo.nome            == undefined ||            jogo.nome            == ''    ||            jogo.nome            == null || jogo.nome.length   > 80 ||
-                jogo.data_lancamento == undefined ||            jogo.data_lancamento == ''    ||            jogo.data_lancamento == null || jogo.data_lancamento.length   > 10 ||
-                jogo.versao          == undefined ||            jogo.versao          == ''    ||            jogo.versao          == null || jogo.versao.length > 10 ||
-                jogo.tamanho         == undefined ||            jogo.tamanho.length   > 10    ||
-                jogo.descricao       == undefined ||
-                jogo.foto_capa       == undefined ||            jogo.foto_capa.length > 200   ||
-                jogo.link            == undefined ||            jogo.link.length > 200        ||
-                id                   == undefined ||            id  ==  ''    ||  id  == null  || isNaN(id)  || id <= 0
+                id                        == undefined ||            id  ==  ''    ||  id  == null  || isNaN(id)  || id <= 0 ||
+                jogo.nome                 == undefined ||             jogo.nome            == ''    ||            jogo.nome            == null || jogo.nome.length   > 80 ||
+                jogo.data_lancamento      == undefined ||             jogo.data_lancamento == ''    ||            jogo.data_lancamento == null || jogo.data_lancamento.length   > 10 ||
+                jogo.versao               == undefined ||             jogo.versao          == ''    ||            jogo.versao          == null || jogo.versao.length > 10 ||
+                jogo.tamanho              == undefined ||             jogo.tamanho.length   > 10    ||
+                jogo.descricao            == undefined ||
+                jogo.foto_capa            == undefined ||             jogo.foto_capa.length > 200   ||
+                jogo.link                 == undefined ||             jogo.link.length > 200        ||
+                jogo.id_classificacao     == ''        ||             jogo.id_classificacao == undefined
             ){
                 return MESSAGE.ERROR_REQUIRED_FIELDS // 400
             }else{
@@ -118,6 +123,10 @@ const excluirJogo = async function(id) {
 // Função para retornar todos os jogos
 const listarJogo = async function() {
     try{
+        //Objeto do tipo array para utilizar no foreach para carregar os dados 
+        //do jogo e da classificacao
+        const arrayJogos = []
+
         let dadosJogos = {}
 
         // Chama a função para retornar os dados do jogo
@@ -131,7 +140,27 @@ const listarJogo = async function() {
                 dadosJogos.status = true
                 dadosJogos.status_code = 200
                 dadosJogos.items = resultJogo.length
-                dadosJogos.games = resultJogo
+                //resultFilme.forEach(async function(itemFilme){
+                //foi necessário substituir o foreach pelo for of, pois
+                //o foreach não consegue trabalhar com requisições async e await
+
+                for(itemJogo of resultJogo){
+                    //Busca os dados da classificação na controller de classificação
+                    //Utilizando o ID da classificação (Chave estrangeira)
+                    let dadosClassificacao = await controllerClassificacao.buscarClassificacao(itemJogo.id_classificacao)
+
+                    //Adicionando um atributo "classificacao" no JSON de JOGOS
+                    itemJogo.classificacao = dadosClassificacao.classificacoes
+                    //Remove o atributo id_classificacao do JSON de JOGOS, pois já temos
+                    //o ID dentro dos dados da classificação
+                    delete itemJogo.id_classificacao
+                    //Adiciona o JSON do jogo, agora com os dados da classificação
+                    //em um array
+                    arrayJogos.push(itemJogo)
+                }
+
+                //Adiciona o novo array de filmes no JSON para retornar ao APP
+                dadosJogos.jogos = arrayJogos
 
                 return dadosJogos // 200
             }else{
@@ -151,6 +180,7 @@ const listarJogo = async function() {
 const buscarJogo = async function(id) { 
     try{
 
+        let arrayJogos = []
         let idJogo = id
 
         if(id == '' || id == undefined || id == null || id == isNaN(id || id <= 0)){
@@ -165,7 +195,16 @@ const buscarJogo = async function(id) {
                     // Cria um objeto do tipo JSON para retornar a lista de jogos
                     dadosJogos.status = true
                     dadosJogos.status_code = 200
-                    dadosJogos.games = resultJogo
+                    for(itemJogo of resultJogo){
+                        let dadosClassificacao = await controllerClassificacao.buscarClassificacao(itemJogo.id_classificacao)
+
+                        itemJogo.classificacao = dadosClassificacao.classificacoes
+                        delete itemJogo.id_classificacao
+
+                        arrayJogos.push(itemJogo)
+                    }
+
+                    dadosJogos.jogos = arrayJogos
                 
                     return dadosJogos // 200
 

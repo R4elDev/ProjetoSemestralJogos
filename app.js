@@ -38,6 +38,7 @@ const controllerVersao = require('./controller/versao/controllerVersao.js')
 const controllerGenero = require('./controller/genero/controllerGenero.js')
 const controllerClassificacao = require('./controller/classificacao/controllerClassificacao.js')
 const controllerDesenvolvedora = require('./controller/desenvolvedora/controllerDesenvolvedora.js')
+const controllerAvaliacao = require('./controller/avaliacao/controllerAvaliacao.js')
 
 
 // Estabelecendo o formato de dados que deverá chegar no BODY da requisição (POST ou PUT)
@@ -437,6 +438,76 @@ app.put('/v1/controle-jogos/desenvolvedora/:id', cors(), bodyParserJson ,async f
     response.status(resultDesenvolvedora.status_code)
     response.json(resultDesenvolvedora)
 })
+
+// ********************** ENDPOINTS DA TABELA AVALIACAO ***************************** //
+
+
+app.post('/v1/controle-jogos/avaliacao', cors(), bodyParserJson, async function(request, response){
+
+    //Recebe o content-type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+    
+    // Recebe o conteúdo do body da requesição em JSON ( deve chegar.. )
+    let dadosBody = request.body
+
+    // Encaminhando os dados do body da requisição para a controller inserir no banco de dados
+    let resultAvaliacao = await controllerAvaliacao.inserirAvaliacao(dadosBody,contentType)
+
+    response.status(resultAvaliacao.status_code)
+    response.json(resultAvaliacao)
+})
+
+// EndPoint para retornar uma lista de desenvolvedoras
+app.get('/v1/controle-jogos/avaliacao', cors(), async function (request, response){
+
+    // Chama a função para listar os jogos
+    let resultAvaliacao = await controllerAvaliacao.listarAvaliacao()
+
+    response.status(resultAvaliacao.status_code)
+    response.json(resultAvaliacao)
+})
+
+// Endpoint para retornar uma desenvolvedora pelo ID
+app.get('/v1/controle-jogos/avaliacao/:id', cors(), async function (request, response){
+
+    let idAvaliacao = request.params.id
+    // Chama a função para retornar um jogo pelo ID
+    let resultAvaliacao = await controllerAvaliacao.buscarAvaliacao(idAvaliacao)
+
+    response.status(resultAvaliacao.status_code)
+    response.json(resultAvaliacao)
+})
+
+// Endpoint para retornar um delet
+app.delete('/v1/controle-jogos/avaliacao/:id', cors(), async function(request,response){
+    // Recebendo o id da requisição
+    let idAvaliacao = request.params.id
+
+    let resultAvaliacao = await controllerAvaliacao.excluirAvaliacao(idAvaliacao)
+
+    response.status(resultAvaliacao.status_code)
+    response.json(resultAvaliacao)
+})
+
+// Endpoint para atualizar uma desenvolvedora
+app.put('/v1/controle-jogos/avaliacao/:id', cors(), bodyParserJson ,async function (request,response){
+    // Recebe o contetType da requesição
+    let contentType = request.headers['content-type']
+
+    // Recebe o id Jogo
+    let idAvaliacao = request.params.id
+
+    // Recebe os dados do jogo encaminhando do body da requesição
+    let dadosBody = request.body
+
+    let resultAvaliacao = await controllerAvaliacao.atualizarAvaliacao(dadosBody,idAvaliacao,contentType)
+
+    response.status(resultAvaliacao.status_code)
+    response.json(resultAvaliacao)
+})
+
+
+
 
 app.listen('3030', function(){
     console.log('API aguardando Requesições...')
