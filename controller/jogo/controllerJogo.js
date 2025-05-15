@@ -18,6 +18,7 @@ const controllerPlataformaJogo = require('./controllerPlataformaJogo.js')
 // Função para inserir um novo jogo
 const inserirJogo = async function(jogo, contentType) {
     try{
+        
         if(contentType == 'application/json'){
             if(
                 jogo.nome            == undefined ||            jogo.nome            == '' ||            jogo.nome            == null || jogo.nome.length   > 80 ||
@@ -34,9 +35,21 @@ const inserirJogo = async function(jogo, contentType) {
         
                 // Encaminha os dados do novo jogo para ser inserido no BD
                 let resultJogo = await jogoDAO.insertJogo(jogo)
-        
                 if(resultJogo){
-                    return MESSAGE.SUCCESS_CREATED_ITEM // 401
+                    for(itemPlataforma of  jogo.plataformas){ // CRIADO PARA VARRER O ARRAY E INSERIR JUNTO COM O JOGO
+                        itemPlataforma.id_jogo = resultJogo.id
+
+                        let resultItemPlataforma = await controllerPlataformaJogo.inserirPlataformaJogo(itemPlataforma, contentType)
+
+                        console.log(resultItemPlataforma)
+
+                        if(resultItemPlataforma){
+                            return MESSAGE.SUCCESS_CREATED_ITEM // 201
+                        }else{
+                            return MESSAGE.ERROR_CONTENT_TYPE
+                        }
+                    }
+                    return MESSAGE.SUCCESS_CREATED_ITEM // 201
                 }else{
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
                 }
@@ -61,7 +74,7 @@ const atualizarJogo = async function(jogo,id,contentType) {
                 jogo.descricao            == undefined ||
                 jogo.foto_capa            == undefined ||             jogo.foto_capa.length > 200   ||
                 jogo.link                 == undefined ||             jogo.link.length > 200        ||
-                jogo.id_classificacao     == ''        ||             jogo.id_classificacao == undefined
+                jogo.id_classificacao     == ''        ||             jogo.id_classificacao  == undefined
             ){
                 return MESSAGE.ERROR_REQUIRED_FIELDS // 400
             }else{
@@ -157,8 +170,12 @@ const listarJogo = async function() {
                     delete itemJogo.id_classificacao
                     //Adiciona o JSON do jogo, agora com os dados da classificação
                     //em um array
-                    let dadosPlataformaJogo = await controllerPlataformaJogo.buscarPlataformaPorJogo(itemJogo.id)
-                    itemJogo.plataforma = dadosPlataformaJogo
+                    let dadosPlataformaJogo = await controllerPlataformaJogo.buscarPlataformaPorJogo(itemJogo.id) // ID PARA BUSCAR E COLOCAR JUNTO AQUI
+                    
+                    
+                    itemJogo.plataformas = dadosPlataformaJogo.plataforma
+
+                    
 
                     arrayJogos.push(itemJogo)
                 }

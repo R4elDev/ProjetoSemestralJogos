@@ -68,6 +68,8 @@ app.post('/v1/controle-jogos/jogo', cors(), bodyParserJson, async function(reque
     // Recebe o conteúdo do body da requesição em JSON ( deve chegar.. )
     let dadosBody = request.body
 
+    
+
     // Encaminhando os dados do body da requisição para a controller inserir no banco de dados
     let resultJogo = await controllerJogo.inserirJogo(dadosBody,contentType)
 

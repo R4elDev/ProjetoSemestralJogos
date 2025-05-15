@@ -15,12 +15,13 @@ const prisma = new PrismaClient()
 //Função para inserir um nova PlataformaJogo
 const insertPlataformaJogo = async function(PlataformaJogo){
     try {
-  
-        let sql = `insert into tbl_plataforma_jogo  (id_plataforma,id_jogo,hardware) 
+        console.log("controller  DAO plataforma jogo")
+        console.log(PlataformaJogo)
+        let sql = `insert into tbl_plataforma_jogo  (id_plataforma,id_jogo,id_versao,hardware) 
         values(
-            '${PlataformaJogo.id_plataforma}',
-            '${PlataformaJogo.id_jogo}',
-            '${PlataformaJogo.id_versao}'
+            ${PlataformaJogo.id_plataforma},
+            ${PlataformaJogo.id_jogo},
+            ${PlataformaJogo.id_versao},
             '${PlataformaJogo.hardware}'
         );`
   
@@ -34,6 +35,7 @@ const insertPlataformaJogo = async function(PlataformaJogo){
             return false
         }
     } catch (error) {
+
         return false
     }
 }
@@ -112,9 +114,6 @@ const selectByIdPlataformaJogo = async function(id){
       return false
     }
 }
-
-
-
 
 const selectVersaoByIdJogo = async function (idJogo){
   try{

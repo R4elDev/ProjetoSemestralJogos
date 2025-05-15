@@ -14,18 +14,19 @@ const plataformaJogoDAO = require('../../model/DAO/plataforma_jogo.js')
 //Função para tratar a inserção de uma nova Plataforma Jogo no DAO
 const inserirPlataformaJogo = async function(plataformaJogo, contentType){
     try {
-        if(String(contentType).toLowerCase() == 'application/json')
+        if(contentType == 'application/json')
         {
                 if (
-                    plataformaJogo.id_plataforma       == ''           || plataformaJogo.id_plataforma     == undefined    || plataformaJogo.id_plataforma  == null || isNaN(plataformaJogo.id_plataforma.id_filme)  || plataformaJogo.id_plataforma.id_filme <=0 ||
+                    plataformaJogo.id_plataforma       == ''           || plataformaJogo.id_plataforma     == undefined    || plataformaJogo.id_plataforma  == null || isNaN(plataformaJogo.id_plataforma)  || plataformaJogo.id_plataforma <=0 ||
                     plataformaJogo.id_jogo             == ''           || plataformaJogo.id_jogo           == undefined    || plataformaJogo.id_jogo == null        || isNaN(plataformaJogo.id_jogo)                 || plataformaJogo.id_jogo<=0                 ||
-                    plataformaJogo.id_versao           == ''           || plataformaJogo.id_versao         == undefined    || plataformaJogo.id_versao == null      || isNaN(plataformaJogo.id_versao)               || plataformaJogo.id_versao<=0
+                    plataformaJogo.id_versao           == ''           || plataformaJogo.id_versao         == undefined    || plataformaJogo.id_versao == null      || isNaN(plataformaJogo.id_versao)               || plataformaJogo.id_versao<=0 ||
+                    plataformaJogo.hardware            == ''           || plataformaJogo.hardware          == undefined    || plataformaJogo.hardware == null       || plataformaJogo.hardware.length > 200
                 )
                 {
                     return message.ERROR_REQUIRED_FIELDS //400
                 }else{
                     //Chama a função para inserir no BD e aguarda o retorno da função
-                    let resultPlataformaJogo = await plataformaJogoDAO.insertPlataformaJogo(plataformaJogoDAO)
+                    let resultPlataformaJogo = await plataformaJogoDAO.insertPlataformaJogo(plataformaJogo)
 
 
                     if(resultPlataformaJogo)
@@ -184,14 +185,14 @@ const buscarPlataformaPorJogo = async function(idJogo){
         }else{
             dadosPlataformaJogo = {}
 
-            let resultPlataformaJogo = await plataformaJogoDAO.selectByIdPlataformaJogo(parseInt(idFilme))
+            let resultPlataformaJogo = await plataformaJogoDAO.selectPlataformaByIdJogo(parseInt(idJogo)) // SEMPRE COLOQUE O NOME CERTO DA FUNÇÃO
             
             if(resultPlataformaJogo != false || typeof(resultPlataformaJogo) == 'object'){
                 if(resultPlataformaJogo.length > 0){
                      //Criando um JSON de retorno de dados para a API
                      dadosPlataformaJogo.status = true
                      dadosPlataformaJogo.status_code = 200
-                     dadosPlataformaJogo.genero = resultPlataformaJogo
+                     dadosPlataformaJogo.plataforma = resultPlataformaJogo
 
                     return dadosPlataformaJogo //200
                 }else{
@@ -203,6 +204,7 @@ const buscarPlataformaPorJogo = async function(idJogo){
         }
 
     } catch (error) {
+        
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
