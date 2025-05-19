@@ -102,8 +102,8 @@ select tbl_versao.* from tbl_jogo
 
 
 show tables;
-desc tbl_plataforma;
-select * from tbl_jogo_genero;
+desc tbl_jogo_desenvolvedora;
+select * from tbl_jogo_desenvolvedora;
 
 
 

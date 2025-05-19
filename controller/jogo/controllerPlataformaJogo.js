@@ -183,7 +183,7 @@ const buscarPlataformaPorJogo = async function(idJogo){
         if(idJogo == '' || idJogo == undefined || idJogo == null || isNaN(idJogo) || idJogo <=0){
             return message.ERROR_REQUIRED_FIELDS //400
         }else{
-            dadosPlataformaJogo = {}
+            let dadosPlataformaJogo = {}
 
             let resultPlataformaJogo = await plataformaJogoDAO.selectPlataformaByIdJogo(parseInt(idJogo)) // SEMPRE COLOQUE O NOME CERTO DA FUNÇÃO
             

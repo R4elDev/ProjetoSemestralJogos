@@ -10,7 +10,7 @@ const message = require('../../modulo/config.js')
 
 //Import do aquivo para realizar o CRUD de dados no Banco de Dados
 const jogoGeneroDAO = require('../../model/DAO/jogo_genero.js')
-const { updateClassificacao } = require('../../model/DAO/classificacao.js')
+
 
 //Função para tratar a inserção de uma nova Plataforma Jogo no DAO
 const inserirJogoGenero = async function(jogoGenero, contentType){
@@ -149,7 +149,7 @@ const buscarJogoGenero = async function(id){
         if(id == '' || id == undefined || id == null || isNaN(id) || id <=0){
             return message.ERROR_REQUIRED_FIELDS //400
         }else{
-            dadosJogoGenero = {}
+            let dadosJogoGenero = {}
 
             let resultJogoGenero = await jogoGeneroDAO.selectByIdJogoGenero(parseInt(id))
             
@@ -179,7 +179,7 @@ const buscarGeneroPorJogo = async function(idJogo){
         if(idJogo == '' || idJogo == undefined || idJogo == null || isNaN(idJogo) || idJogo <=0){
             return message.ERROR_REQUIRED_FIELDS //400
         }else{
-            dadosJogoGenero = {}
+            let dadosJogoGenero = {}
 
             let resultJogoGenero = await jogoGeneroDAO.selectGeneroByIdJogo(parseInt(idJogo)) // SEMPRE COLOQUE O NOME CERTO DA FUNÇÃO
             
