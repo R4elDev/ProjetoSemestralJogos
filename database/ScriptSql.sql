@@ -91,15 +91,20 @@ create table tbl_avaliacoes(
 
 
 
-insert into tbl_plataforma_jogo (id_plataforma, id_jogo, id_versao,hardware) values (1, 1,1, '50gb de Armazenamento, PsPLUS');
 
+select tbl_versao.* from tbl_jogo
+                    inner join tbl_plataforma_jogo
+                      on tbl_jogo.id = tbl_plataforma_jogo.id_jogo
+                    inner join tbl_versao
+                      on tbl_versao.id = tbl_plataforma_jogo.id_versao
+                  where tbl_jogo.id = 5;
 
 
 
 show tables;
-desc tbl_jogo;
-select * from tbl_jogo;
+desc tbl_plataforma;
+select * from tbl_jogo_genero;
 
-drop database db_controle_jogos_bb;
+
 
 

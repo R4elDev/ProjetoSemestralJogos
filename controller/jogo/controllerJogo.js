@@ -14,6 +14,7 @@ const jogoDAO = require('../../model/DAO/jogo.js')
 //Import das controlleres para criar as relações com o jogo
 const controllerClassificacao = require('../classificacao/controllerClassificacao.js')
 const controllerPlataformaJogo = require('./controllerPlataformaJogo.js')
+const controllerJogoGenero = require('./controllerJogoGenero.js')
 
 // Função para inserir um novo jogo
 const inserirJogo = async function(jogo, contentType) {
@@ -41,14 +42,22 @@ const inserirJogo = async function(jogo, contentType) {
 
                         let resultItemPlataforma = await controllerPlataformaJogo.inserirPlataformaJogo(itemPlataforma, contentType)
 
-                        console.log(resultItemPlataforma)
-
-                        if(resultItemPlataforma){
-                            return MESSAGE.SUCCESS_CREATED_ITEM // 201
-                        }else{
-                            return MESSAGE.ERROR_CONTENT_TYPE
+                        if(!resultItemPlataforma){
+                            return MESSAGE.ERROR_CONTENT_TYPE 
                         }
                     }
+
+                    for(itemGenero of jogo.generos){
+                        itemGenero.id_jogo = resultJogo.id
+
+                        let resultItemGenero = await controllerJogoGenero.inserirJogoGenero(itemGenero, contentType)
+                        
+
+                        if(!resultItemGenero){
+                            return MESSAGE.ERROR_CONTENT_TYPE 
+                        }
+                    }
+
                     return MESSAGE.SUCCESS_CREATED_ITEM // 201
                 }else{
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
@@ -171,9 +180,13 @@ const listarJogo = async function() {
                     //Adiciona o JSON do jogo, agora com os dados da classificação
                     //em um array
                     let dadosPlataformaJogo = await controllerPlataformaJogo.buscarPlataformaPorJogo(itemJogo.id) // ID PARA BUSCAR E COLOCAR JUNTO AQUI
-                    
-                    
                     itemJogo.plataformas = dadosPlataformaJogo.plataforma
+
+                    let dadosVersaoPlataformaJogo = await controllerPlataformaJogo.buscarVersaoPorJogo(itemJogo.id)
+                    itemJogo.versoes = dadosVersaoPlataformaJogo.versoes
+
+                    let dadosGeneroJogoGenero = await controllerJogoGenero.buscarGeneroPorJogo(itemJogo.id)
+                    itemJogo.generos = dadosGeneroJogoGenero.generos
 
                     
 
@@ -221,6 +234,15 @@ const buscarJogo = async function(id) {
 
                         itemJogo.classificacao = dadosClassificacao.classificacoes
                         delete itemJogo.id_classificacao
+
+                        let dadosPlataforma = await controllerPlataformaJogo.buscarPlataformaPorJogo(itemJogo.id)
+                        itemJogo.plataformas = dadosPlataforma.plataforma
+
+                        let dadosVersaoPlataformaJogo = await controllerPlataformaJogo.buscarVersaoPorJogo(itemJogo.id)
+                        itemJogo.versoes = dadosVersaoPlataformaJogo.versoes
+
+                        let dadosGenero = await controllerJogoGenero.buscarGeneroPorJogo(itemJogo.id)
+                        itemJogo.generos = dadosGenero.generos
 
                         arrayJogos.push(itemJogo)
                     }

@@ -15,8 +15,6 @@ const prisma = new PrismaClient()
 //Função para inserir um nova PlataformaJogo
 const insertPlataformaJogo = async function(PlataformaJogo){
     try {
-        console.log("controller  DAO plataforma jogo")
-        console.log(PlataformaJogo)
         let sql = `insert into tbl_plataforma_jogo  (id_plataforma,id_jogo,id_versao,hardware) 
         values(
             ${PlataformaJogo.id_plataforma},
@@ -248,5 +246,6 @@ module.exports = {
     selectAllPlataformaJogo,
     selectByIdPlataformaJogo,
     selectPlataformaByIdJogo,
-    selectJogoByIdPlataforma
+    selectJogoByIdPlataforma,
+    selectVersaoByIdJogo
 }

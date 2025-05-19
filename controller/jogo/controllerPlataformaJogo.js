@@ -1,7 +1,7 @@
 /**********************************************************************************
  * Objetivo: Controller responsável pela regra de negócio referente ao CRUD de Plataforma Jogo
  * Data: 08/05/2025
- * Autor: Marcel
+ * Autor: Israel
  * Versão: 1.0
  **********************************************************************************/
 
@@ -209,13 +209,45 @@ const buscarPlataformaPorJogo = async function(idJogo){
     }
 }
 
+const buscarVersaoPorJogo = async function(idJogo){
+    try {
+        if(idJogo == '' || idJogo == undefined || idJogo == null || isNaN(idJogo) || idJogo <=0){
+            return message.ERROR_REQUIRED_FIELDS //400
+        }else{
+            dadosPlataformaJogo = {}
+
+            let resultPlataformaJogo = await plataformaJogoDAO.selectVersaoByIdJogo(parseInt(idJogo)) // SEMPRE COLOQUE O NOME CERTO DA FUNÇÃO
+            
+            if(resultPlataformaJogo != false || typeof(resultPlataformaJogo) == 'object'){
+                if(resultPlataformaJogo.length > 0){
+                     //Criando um JSON de retorno de dados para a API
+                     dadosPlataformaJogo.status = true
+                     dadosPlataformaJogo.status_code = 200
+                     dadosPlataformaJogo.versoes = resultPlataformaJogo
+
+                    return dadosPlataformaJogo //200
+                }else{
+                    return message.ERROR_NOT_FOUND //404
+                }
+            }else{
+                return message.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        }
+
+    } catch (error) {
+        
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
 module.exports = {
     inserirPlataformaJogo,
     atualizarPlataformaJogo,
     excluirPlataformaJogo,
     listarPlataformaJogo,
     buscarPlataformaJogo,
-    buscarPlataformaPorJogo
+    buscarPlataformaPorJogo,
+    buscarVersaoPorJogo
 }
 
 
