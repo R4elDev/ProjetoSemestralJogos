@@ -10,6 +10,9 @@ const MESSAGE = require('../../modulo/config.js')
 // Import do DAO para realizar o CRUD no Banco de Dados
 const versaoDAO = require('../../model/DAO/versao.js')
 
+const controllerPlataformaJogo = require('../jogo/controllerPlataformaJogo.js')
+
+
 // Função para inserir uma nova versão
 const inserirVersao = async function (versao, contentType){
     try{
@@ -93,6 +96,9 @@ const excluirVersao = async function(id){
 // Função para retornar todas as versões
 const listarVersao = async function(){
     try{
+
+        const arrayVersao = []
+
         let dadosVersoes = {}
 
         let resultVersoes = await versaoDAO.selectAllVersao()
@@ -102,7 +108,15 @@ const listarVersao = async function(){
                 dadosVersoes.status = true
                 dadosVersoes.status_code = 200
                 dadosVersoes.items = resultVersoes.length
-                dadosVersoes.versao = resultVersoes
+                
+                for(itemVersao of resultVersoes){
+                    let dadosJogoPlataformaJogo = await controllerPlataformaJogo.buscarJogoPorVersao(itemVersao.id)
+                    itemVersao.jogos = dadosJogoPlataformaJogo.jogos
+
+                    arrayVersao.push(itemVersao)
+                }
+
+                dadosVersoes.versoes = arrayVersao
 
                 return dadosVersoes
             }else{
@@ -112,7 +126,8 @@ const listarVersao = async function(){
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
         }
     }catch(error){
-        return
+        console.log(error)
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
 // Função para buscar uma versão pelo ID

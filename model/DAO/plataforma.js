@@ -103,6 +103,8 @@ const selectByIdPlataforma = async function (id){
 }
 
 
+
+
 module.exports = {
     insertPlataforma,
     updatePlataforma,

@@ -11,6 +11,8 @@ const MESSAGE = require('../../modulo/config.js')
 // Import do DAO para realizar o CRUD no Banco de Dados
 const generoDAO = require('../../model/DAO/genero.js')
 
+const controllerJogoGenero = require('../jogo/controllerJogoGenero.js')
+
 
 // Função para inserir um novo jogo
 const inserirGenero = async function(genero,contentType){
@@ -102,6 +104,8 @@ const excluirGenero = async function(id){
 // Função para retornar todos os jogos
 const listarGenero = async function(){
     try{
+
+        const arrayGeneros = []
         let dadosGenero = {}
 
         let resultGenero = await generoDAO.selectAllGenero()
@@ -113,7 +117,14 @@ const listarGenero = async function(){
                 dadosGenero.status = true
                 dadosGenero.status_code = 200
                 dadosGenero.items = resultGenero.length
-                dadosGenero.generos = resultGenero
+                for(itemGenero of resultGenero){
+                    let dadosJogosJogoGenero = await controllerJogoGenero.buscarJogoPorGenero(itemGenero.id)
+                    itemGenero.jogos = dadosJogosJogoGenero.jogos
+
+                    arrayGeneros.push(itemGenero)
+                }
+
+                dadosGenero.generos = arrayGeneros
 
                 return dadosGenero
             }else{
@@ -136,6 +147,8 @@ const buscarGenero = async function(id){
         if(id == '' || id == undefined || id == null || id == isNaN(id || id <= 0)){
             return MESSAGE.ERROR_REQUIRED_FIELDS // 400 
         }else{
+
+            const arrayGeneros = []
             let dadosGenero = {}
 
             let resultGenero = await generoDAO.selectByIdGenero(parseInt(idGenero))
@@ -144,7 +157,14 @@ const buscarGenero = async function(id){
                 if(resultGenero.length > 0){
                     dadosGenero.status = true
                     dadosGenero.status_code = 200
-                    dadosGenero.generos = resultGenero
+                    for(itemGenero of resultGenero){
+                        let dadosJogosJogoGenero = await controllerJogoGenero.buscarJogoPorGenero(itemGenero.id)
+                        itemGenero.jogos = dadosJogosJogoGenero.jogos
+    
+                        arrayGeneros.push(itemGenero)
+                    }
+    
+                    dadosGenero.generos = arrayGeneros
 
                     return dadosGenero
                 }else{

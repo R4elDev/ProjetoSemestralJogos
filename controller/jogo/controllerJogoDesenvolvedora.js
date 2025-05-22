@@ -205,6 +205,37 @@ const buscarDesenvolvedoraPorJogo = async function(idJogo){
     }
 }
 
+const buscarJogoPorDesenvolvedora = async function(idDesenvolvedora){
+    try {
+        if(idDesenvolvedora == '' || idDesenvolvedora == undefined || idDesenvolvedora == null || isNaN(idDesenvolvedora) || idDesenvolvedora <=0){
+            return message.ERROR_REQUIRED_FIELDS //400
+        }else{
+            let dadosJogoPorDesenvolvedora = {}
+
+            let resultJogoPorDesenvolvedora = await jogoDesenvolvedoraDAO.selectJogoByIdDesenvolvedora(parseInt(idDesenvolvedora)) // SEMPRE COLOQUE O NOME CERTO DA FUNÇÃO
+            
+            if(resultJogoPorDesenvolvedora != false || typeof(resultJogoPorDesenvolvedora) == 'object'){
+                if(resultJogoPorDesenvolvedora.length > 0){
+                     //Criando um JSON de retorno de dados para a API
+                     dadosJogoPorDesenvolvedora.status = true
+                     dadosJogoPorDesenvolvedora.status_code = 200
+                     dadosJogoPorDesenvolvedora.jogos = resultJogoPorDesenvolvedora
+
+                    return dadosJogoPorDesenvolvedora //200
+                }else{
+                    return message.ERROR_NOT_FOUND //404
+                }
+            }else{
+                return message.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        }
+
+    } catch (error) {
+        
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
 
 
 module.exports = {
@@ -213,5 +244,7 @@ module.exports = {
    excluirJogoDesenvolvedora,
    listarJogoDesenvolvedora,
    buscarJogoDesenvolvedora,
-   buscarDesenvolvedoraPorJogo
+   buscarDesenvolvedoraPorJogo,
+   buscarJogoDesenvolvedora,
+   buscarJogoPorDesenvolvedora
 }

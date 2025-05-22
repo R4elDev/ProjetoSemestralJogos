@@ -205,6 +205,37 @@ const buscarGeneroPorJogo = async function(idJogo){
     }
 }
 
+const buscarJogoPorGenero = async function(idGenero){
+    try {
+        if(idGenero == '' || idGenero == undefined || idGenero == null || isNaN(idGenero) || idGenero <=0){
+            return message.ERROR_REQUIRED_FIELDS //400
+        }else{
+            let dadosJogoGenero = {}
+
+            let resultJogoGenero = await jogoGeneroDAO.selectJogoByIdGenero(parseInt(idGenero)) // SEMPRE COLOQUE O NOME CERTO DA FUNÇÃO
+            
+            if(resultJogoGenero != false || typeof(resultJogoGenero) == 'object'){
+                if(resultJogoGenero.length > 0){
+                     //Criando um JSON de retorno de dados para a API
+                     dadosJogoGenero.status = true
+                     dadosJogoGenero.status_code = 200
+                     dadosJogoGenero.jogos = resultJogoGenero
+
+                    return dadosJogoGenero //200
+                }else{
+                    return message.ERROR_NOT_FOUND //404
+                }
+            }else{
+                return message.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        }
+
+    } catch (error) {
+        
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
 
 
 module.exports = {
@@ -213,5 +244,6 @@ module.exports = {
     excluirJogoGenero,
     listarJogoGenero,
     buscarJogoGenero,
-    buscarGeneroPorJogo
+    buscarGeneroPorJogo,
+    buscarJogoPorGenero
 }

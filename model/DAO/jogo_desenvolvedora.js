@@ -109,7 +109,7 @@ const selectByIdJogoDesenvolvedora = async function(id){
     }
 }
 
-const selectDesenvolvedoraByIdJogo= async function(idJogo){
+const selectDesenvolvedoraByIdJogo = async function(idJogo){
   try{
     let sql= `select tbl_desenvolvedora.* from tbl_jogo
                     inner join tbl_jogo_desenvolvedora
@@ -130,11 +130,34 @@ const selectDesenvolvedoraByIdJogo= async function(idJogo){
   }
 }
 
+const selectJogoByIdDesenvolvedora = async function(idDesenvolvedora){
+  try{
+    let sql = `SELECT tbl_jogo.* FROM tbl_jogo
+                INNER JOIN tbl_jogo_desenvolvedora
+                  ON tbl_jogo.id = tbl_jogo_desenvolvedora.id_jogo
+                INNER JOIN tbl_desenvolvedora
+                  ON tbl_desenvolvedora.id = tbl_jogo_desenvolvedora.id_desenvolvedora
+                WHERE tbl_desenvolvedora.id = ${idDesenvolvedora};
+                `
+
+    let result = await prisma.$queryRawUnsafe(sql)
+
+    if(result){
+      return result
+    }else{
+      return false
+    }
+  }catch(error){
+    return false
+  }
+}
+
 module.exports = {
     insertJogoDesenvolvedora,
     updateJogoDesenvolvedora,
     deleteJogoDesenvolvedora,
     selectAllJogoDesenvolvedora,
     selectByIdJogoDesenvolvedora,
-    selectDesenvolvedoraByIdJogo
+    selectDesenvolvedoraByIdJogo,
+    selectJogoByIdDesenvolvedora
 }

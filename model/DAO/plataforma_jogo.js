@@ -157,12 +157,12 @@ const selectJogoByIdVersao = async function (idVersao){
 
 const selectVersaoBydIdPlataforma = async function (idPlataforma){
   try{
-    let sql= `select tbl_versao.* from tbl_plataforma
-                    inner join tbl_plataforma_jogo
-                      on tbl_versao.id = tbl_plataforma_jogo.id_versao
-                    inner join tbl_plataforma
-                      on tbl_plataforma.id = tbl_plataforma_jogo.id_plataforma
-                  where tbl_plataforma.id = ${idJogo}`
+    let sql= `SELECT tbl_versao.* FROM tbl_versao
+                  INNER JOIN tbl_plataforma_jogo
+                    ON tbl_versao.id = tbl_plataforma_jogo.id_versao
+                  INNER JOIN tbl_plataforma
+                    ON tbl_plataforma.id = tbl_plataforma_jogo.id_plataforma
+                  WHERE tbl_plataforma.id = ${idPlataforma}`
 
     let result = await prisma.$queryRawUnsafe(sql)
 
@@ -183,7 +183,7 @@ const selectPlataformaByIdVersao = async function (idVersao){
                       on tbl_versao.id = tbl_plataforma_jogo.id_versao
                     inner join tbl_plataforma
                       on tbl_plataforma.id = tbl_plataforma_jogo.id_plataforma
-                  where tbl_versao.id = ${idJogo}`
+                  where tbl_versao.id = ${idVersao}`
 
     let result = await prisma.$queryRawUnsafe(sql)
 
@@ -247,5 +247,7 @@ module.exports = {
     selectByIdPlataformaJogo,
     selectPlataformaByIdJogo,
     selectJogoByIdPlataforma,
-    selectVersaoByIdJogo
+    selectVersaoByIdJogo,
+    selectJogoByIdVersao,
+    selectVersaoBydIdPlataforma
 }

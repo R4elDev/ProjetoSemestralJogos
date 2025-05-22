@@ -11,6 +11,8 @@ const MESSAGE = require('../../modulo/config.js')
 // Import do DAO para realizar o CRUD no Banco de Dados
 const desenvolvedoraDAO = require('../../model/DAO/desenvolvedora.js')
 
+const controllerJogoDesenvolvedora = require('../jogo/controllerJogoDesenvolvedora.js')
+
 // Função para inserir uma nova desenvolvedora
 const inserirDesenvolvedora = async function(desenvolvedora, contentType) {
     try{
@@ -110,6 +112,8 @@ const excluirDesenvolvedora = async function(id) {
 // Função para retornar todas as desenvolvedoras
 const listarDesenvolvedora = async function() {
     try{
+
+        const arrayDesenvolvedoras = []
         let dadosDesenvolvedora = {}
 
         // Chama a função para retornar os dados do jogo
@@ -123,7 +127,15 @@ const listarDesenvolvedora = async function() {
                 dadosDesenvolvedora.status = true
                 dadosDesenvolvedora.status_code = 200
                 dadosDesenvolvedora.items = resultDesenvolvedora.length
-                dadosDesenvolvedora.desenvolvedoras = resultDesenvolvedora
+                for(item of resultDesenvolvedora){
+                    let dadosJogoDesenvolvedora = await controllerJogoDesenvolvedora.buscarJogoPorDesenvolvedora(item.id)
+                    item.jogos = dadosJogoDesenvolvedora.jogos
+
+                    arrayDesenvolvedoras.push(item)
+        
+                }
+
+                dadosDesenvolvedora.desenvolvedoras = arrayDesenvolvedoras
 
                 return dadosDesenvolvedora // 200
             }else{
@@ -149,6 +161,9 @@ const buscarDesenvolvedora = async function(id) {
         if(id == '' || id == undefined || id == null || id == isNaN(id || id <= 0)){
             return MESSAGE.ERROR_REQUIRED_FIELDS // 400 
         }else{
+
+            const arrayDesenvolvedoras = []
+            
             let dadosDesenvolvedora = {}
             // Chama a função para retornar os dados do jogo
 
@@ -158,7 +173,15 @@ const buscarDesenvolvedora = async function(id) {
                     // Cria um objeto do tipo JSON pararetornar a lista de jogos
                     dadosDesenvolvedora.status = true
                     dadosDesenvolvedora.status_code = 200
-                    dadosDesenvolvedora.desenvolvedoras = resultDesenvolvedora
+                    for(item of resultDesenvolvedora){
+                        let dadosJogoDesenvolvedora = await controllerJogoDesenvolvedora.buscarJogoPorDesenvolvedora(item.id)
+                        item.jogos = dadosJogoDesenvolvedora.jogos
+    
+                        arrayDesenvolvedoras.push(item)
+            
+                    }
+    
+                    dadosDesenvolvedora.desenvolvedoras = arrayDesenvolvedoras
 
                     return dadosDesenvolvedora // 200
                 }else{

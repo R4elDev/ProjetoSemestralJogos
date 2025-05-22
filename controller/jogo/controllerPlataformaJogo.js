@@ -240,6 +240,68 @@ const buscarVersaoPorJogo = async function(idJogo){
     }
 }
 
+const buscarJogoPorVersao = async function(idVersao){
+    try {
+        if(idVersao == '' || idVersao == undefined || idVersao == null || isNaN(idVersao) || idVersao <=0){
+            return message.ERROR_REQUIRED_FIELDS //400
+        }else{
+            dadosPlataformaJogo = {}
+
+            let resultPlataformaJogo = await plataformaJogoDAO.selectJogoByIdVersao(parseInt(idVersao)) // SEMPRE COLOQUE O NOME CERTO DA FUNÇÃO
+            
+            if(resultPlataformaJogo != false || typeof(resultPlataformaJogo) == 'object'){
+                if(resultPlataformaJogo.length > 0){
+                     //Criando um JSON de retorno de dados para a API
+                     dadosPlataformaJogo.status = true
+                     dadosPlataformaJogo.status_code = 200
+                     dadosPlataformaJogo.jogos = resultPlataformaJogo
+
+                    return dadosPlataformaJogo //200
+                }else{
+                    return message.ERROR_NOT_FOUND //404
+                }
+            }else{
+                return message.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        }
+
+    } catch (error) {
+        
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
+const buscarVersaoPorPlataforma = async function(idPlataforma){
+    try {
+        if(idPlataforma == '' || idPlataforma == undefined || idPlataforma == null || isNaN(idPlataforma) || idPlataforma <=0){
+            return message.ERROR_REQUIRED_FIELDS //400
+        }else{
+            dadosPlataformaJogo = {}
+
+            let resultPlataformaJogo = await plataformaJogoDAO.selectVersaoBydIdPlataforma(parseInt(idPlataforma)) // SEMPRE COLOQUE O NOME CERTO DA FUNÇÃO
+            
+            if(resultPlataformaJogo != false || typeof(resultPlataformaJogo) == 'object'){
+                if(resultPlataformaJogo.length > 0){
+                     //Criando um JSON de retorno de dados para a API
+                     dadosPlataformaJogo.status = true
+                     dadosPlataformaJogo.status_code = 200
+                     dadosPlataformaJogo.versoes = resultPlataformaJogo
+
+                    return dadosPlataformaJogo //200
+                }else{
+                    return message.ERROR_NOT_FOUND //404
+                }
+            }else{
+                return message.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        }
+
+    } catch (error) {
+        
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
 module.exports = {
     inserirPlataformaJogo,
     atualizarPlataformaJogo,
@@ -247,7 +309,9 @@ module.exports = {
     listarPlataformaJogo,
     buscarPlataformaJogo,
     buscarPlataformaPorJogo,
-    buscarVersaoPorJogo
+    buscarVersaoPorJogo,
+    buscarJogoPorVersao,
+    buscarVersaoPorPlataforma
 }
 
 

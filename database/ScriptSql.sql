@@ -92,18 +92,21 @@ create table tbl_avaliacoes(
 
 
 
-select tbl_versao.* from tbl_jogo
-                    inner join tbl_plataforma_jogo
-                      on tbl_jogo.id = tbl_plataforma_jogo.id_jogo
-                    inner join tbl_versao
-                      on tbl_versao.id = tbl_plataforma_jogo.id_versao
-                  where tbl_jogo.id = 5;
+
+                  
+                  
+SELECT tbl_jogo.* FROM tbl_jogo
+                INNER JOIN tbl_jogo_desenvolvedora
+                  ON tbl_jogo.id = tbl_jogo_desenvolvedora.id_jogo
+                INNER JOIN tbl_desenvolvedora
+                  ON tbl_desenvolvedora.id = tbl_jogo_desenvolvedora.id_desenvolvedora
+                WHERE tbl_desenvolvedora.id = 1;
 
 
 
 show tables;
 desc tbl_jogo_desenvolvedora;
-select * from tbl_jogo_desenvolvedora;
+select * from tbl_plataforma;
 
 
 

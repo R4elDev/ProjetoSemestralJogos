@@ -70,6 +70,7 @@ const updateJogo = async function (jogo) {
             return false
         }
     }catch(error){
+
         return false
     }
 }
@@ -88,7 +89,6 @@ const deleteJogo = async function (id) {
             return false
         }
     }catch(error){
-        console.log(error)
         return false
     }
 }

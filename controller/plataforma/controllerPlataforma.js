@@ -10,6 +10,8 @@ const MESSAGE = require('../../modulo/config.js')
 // Import do DAO para realizar o CRUD no Banco de Dados
 const plataformaDAO = require('../../model/DAO/plataforma.js')
 
+const controllerPlataformaJogo = require('../jogo/controllerPlataformaJogo.js')
+
 // Função para inserir uma nova plataforma
 const inserirPlataforma = async function (plataforma, contentType) {
     try{
@@ -103,6 +105,9 @@ const excluirPlataforma = async function(id){
 // Função para retornar todas as plataformas
 const listarPlataforma = async function(){
     try{
+
+        const arrayPlataforma = []
+
         let dadosPlataformas = {}
 
         let resultPlataforma = await plataformaDAO.selectAllPlataforma()
@@ -113,7 +118,14 @@ const listarPlataforma = async function(){
                 dadosPlataformas.status = true
                 dadosPlataformas.status_code = 200
                 dadosPlataformas.items = resultPlataforma.length
-                dadosPlataformas.plataforma = resultPlataforma
+                for(itemVersao of resultPlataforma){
+                    let dadosVersaoPlataformaJogo = await controllerPlataformaJogo.buscarVersaoPorPlataforma(itemVersao.id)
+                    itemVersao.versoes = dadosVersaoPlataformaJogo.versoes
+
+                    arrayPlataforma.push(itemVersao)
+                }
+
+                dadosPlataformas.plataforma = arrayPlataforma
 
                 return dadosPlataformas
             }else{
@@ -123,18 +135,23 @@ const listarPlataforma = async function(){
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
         }
     }catch(error){
-        console.log(error)
+        
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
 // Função para buscar uma plataforma pelo ID
 const buscarPlataforma = async function(id){
     try{
+
+
         let idPlataforma = id
 
         if(id == '' || id == undefined || id == null || id == isNaN(id || id <= 0)){
             return MESSAGE.ERROR_REQUIRED_FIELDS // 400
         }else{
+
+            const arrayPlataforma = []
+            
             let dadosPlataforma = {}
 
             let resultPlataforma = await plataformaDAO.selectByIdPlataforma(parseInt(idPlataforma))
@@ -143,7 +160,14 @@ const buscarPlataforma = async function(id){
                 if(resultPlataforma.length > 0){
                     dadosPlataforma.status = true
                     dadosPlataforma.status_code = 200
-                    dadosPlataforma.plataforma = resultPlataforma
+                    for(itemVersao of resultPlataforma){
+                        let dadosVersaoPlataformaJogo = await controllerPlataformaJogo.buscarVersaoPorPlataforma(itemVersao.id)
+                        itemVersao.versoes = dadosVersaoPlataformaJogo.versoes
+    
+                        arrayPlataforma.push(itemVersao)
+                    }
+                    
+                    dadosPlataforma.plataforma = arrayPlataforma
 
                     return dadosPlataforma // 200
                 }else{

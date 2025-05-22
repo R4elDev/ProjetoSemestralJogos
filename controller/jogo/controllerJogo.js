@@ -70,6 +70,8 @@ const inserirJogo = async function(jogo, contentType) {
                         }
                     }
 
+                    
+
                     return MESSAGE.SUCCESS_CREATED_ITEM // 201
                 }else{
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
