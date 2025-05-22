@@ -118,6 +118,7 @@ const listarPlataforma = async function(){
                 dadosPlataformas.status = true
                 dadosPlataformas.status_code = 200
                 dadosPlataformas.items = resultPlataforma.length
+                
                 for(itemVersao of resultPlataforma){
                     let dadosVersaoPlataformaJogo = await controllerPlataformaJogo.buscarVersaoPorPlataforma(itemVersao.id)
                     itemVersao.versoes = dadosVersaoPlataformaJogo.versoes

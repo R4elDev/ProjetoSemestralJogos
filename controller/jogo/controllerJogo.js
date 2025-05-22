@@ -261,6 +261,9 @@ const buscarJogo = async function(id) {
                         let dadosGenero = await controllerJogoGenero.buscarGeneroPorJogo(itemJogo.id)
                         itemJogo.generos = dadosGenero.generos
 
+                        let dadosDesenvolvedoraJogoDesenvolvedora = await controllerJogoDesenvolvedora.buscarDesenvolvedoraPorJogo(itemJogo.id)
+                        itemJogo.desenvolvedoras = dadosDesenvolvedoraJogoDesenvolvedora.desenvolvedoras
+
                         arrayJogos.push(itemJogo)
                     }
 
